@@ -41,6 +41,21 @@ app.post("/save", function (req, res) {
     });
 });
 
+app.get("/update", function (req, res) {
+    let time = (new Date()).getTime();
+    // put user name into database
+    // Get path ref
+    let ref = database.ref("/user");
+    ref.set({
+        time: time
+    }, function (error) {
+        if (error) {
+            res.send("Error");
+        } else {
+            res.send("OK");
+        }
+    });
+});
 app.listen(3000, function () {
     console.log("Server Started");
 });
