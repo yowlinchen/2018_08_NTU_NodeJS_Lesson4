@@ -23,39 +23,27 @@ app.use(parser.urlencoded({
     extended: true
 }));
 
-app.post("/save", function (req, res) {
+app.post("/signup", function (req, res) {
     let name = req.body.name;
-    let time = (new Date()).getTime();
-    // put user name into database
-    // Get path ref
-    let ref = database.ref("/user");
-    ref.set({
+    let username = req.body.username;
+    let password = req.body.password;
+    let time = (new Date()).getTime(); // 1970/1/1 到現在過了幾個毫秒
+    // put user info into database
+    // Get the parent only
+    let ref = database.ref("/users");
+    ref.push({
         name: name,
-        time: time
+        username: username,
+        password: password
     }, function (error) {
         if (error) {
             res.send("Error");
         } else {
-            res.send("OK");
+            res.send("Ok");
         }
     });
 });
 
-app.get("/update", function (req, res) {
-    let time = (new Date()).getTime();
-    // put user name into database
-    // Get path ref
-    let ref = database.ref("/user");
-    ref.set({
-        time: time
-    }, function (error) {
-        if (error) {
-            res.send("Error");
-        } else {
-            res.send("OK");
-        }
-    });
-});
 app.listen(3000, function () {
     console.log("Server Started");
 });
