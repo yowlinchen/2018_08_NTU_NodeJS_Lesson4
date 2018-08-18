@@ -26,16 +26,20 @@ app.use(parser.urlencoded({
 // Take care of signin
 app.post("/signin", function (req, res) {
     let ref = database.ref("/users");
-    ref.once("value", function (snapshot) {
-        let value = snapshot.val();
-        res.send(value);
+    ref.orderByChild("username").once("value", function (snapshot) {
+        let data = [];
+        snapshot.forEach(function (userSnapshot) {
+            data.push(userSnapshot.val());
+        });
+        // let value = snapshot.val();
+        res.send(data);
     });
 });
 
 
 app.post("/signup", function (req, res) {
     let name = req.body.name;
-    let username = reqp.body.username;
+    let username = req.body.username;
     let password = req.body.password;
     let time = (new Date()).getTime(); // 1970/1/1 到現在過了幾個毫秒
     // put user info into database
