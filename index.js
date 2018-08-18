@@ -33,7 +33,9 @@ app.post("/signin", function (req, res) {
     ref.orderByChild("username").equalTo(username).once("value", function (snapshot) {
         let data = [];
         snapshot.forEach(function (userSnapshot) {
-            data.push(userSnapshot.val());
+            let value = userSnapshot.val();
+            value.key = userSnapshot.key;
+            data.push(value);
         });
         // let value = snapshot.val();
 
@@ -41,10 +43,22 @@ app.post("/signin", function (req, res) {
         let user = data.find(function (item) {
             return item.password === password;
         });
-        res.send(data);
+        if (user) {
+            updateUserTime(user.key);
+            res.send(user);
+        } else {
+            res.send("Failed");
+        }
     });
 });
 
+function updateUserTime(key) {
+    let time = (new Date()).getTime();
+    let ref = database.ref("/users/" + key);
+    ref.update({
+        time: time
+    }, function () {});
+}
 
 app.post("/signup", function (req, res) {
     let name = req.body.name;
@@ -57,7 +71,8 @@ app.post("/signup", function (req, res) {
     ref.push({
         name: name,
         username: username,
-        password: password
+        password: password,
+        time: time
     }, function (error) {
         if (error) {
             res.send("Error");
