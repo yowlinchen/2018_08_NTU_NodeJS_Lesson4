@@ -23,9 +23,19 @@ app.use(parser.urlencoded({
     extended: true
 }));
 
+// Take care of signin
+app.post("/signin", function (req, res) {
+    let ref = database.ref("/users");
+    ref.once("value", function (snapshot) {
+        let value = snapshot.val();
+        res.send(value);
+    });
+});
+
+
 app.post("/signup", function (req, res) {
     let name = req.body.name;
-    let username = req.body.username;
+    let username = reqp.body.username;
     let password = req.body.password;
     let time = (new Date()).getTime(); // 1970/1/1 到現在過了幾個毫秒
     // put user info into database
