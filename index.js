@@ -25,13 +25,21 @@ app.use(parser.urlencoded({
 
 // Take care of signin
 app.post("/signin", function (req, res) {
+    let username = req.body.username;
+    let password = req.body.password;
+
+    // Get datat from Datatbase to check
     let ref = database.ref("/users");
-    ref.orderByChild("username").equalTo("zzz").once("value", function (snapshot) {
+    ref.orderByChild("username").equalTo(username).once("value", function (snapshot) {
         let data = [];
         snapshot.forEach(function (userSnapshot) {
             data.push(userSnapshot.val());
         });
         // let value = snapshot.val();
+
+        let user = data.find(function (item) {
+            return item.password === password;
+        });
         res.send(data);
     });
 });
