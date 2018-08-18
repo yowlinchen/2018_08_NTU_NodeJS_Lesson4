@@ -26,7 +26,7 @@ app.use(parser.urlencoded({
 // Take care of signin
 app.post("/signin", function (req, res) {
     let ref = database.ref("/users");
-    ref.orderByChild("username").once("value", function (snapshot) {
+    ref.orderByChild("username").equalTo("zzz").once("value", function (snapshot) {
         let data = [];
         snapshot.forEach(function (userSnapshot) {
             data.push(userSnapshot.val());
