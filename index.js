@@ -25,10 +25,14 @@ app.use(parser.urlencoded({
 
 app.post("/save", function (req, res) {
     let name = req.body.name;
+    let time = (new Date()).getTime();
     // put user name into database
     // Get path ref
-    let ref = database.ref("/name");
-    ref.set(name, function (error) {
+    let ref = database.ref("/user");
+    ref.set({
+        name: name,
+        time: time
+    }, function (error) {
         if (error) {
             res.send("Error");
         } else {
