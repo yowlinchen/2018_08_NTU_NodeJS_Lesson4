@@ -37,6 +37,7 @@ app.post("/signin", function (req, res) {
         });
         // let value = snapshot.val();
 
+        // 從資料中比對密碼
         let user = data.find(function (item) {
             return item.password === password;
         });
